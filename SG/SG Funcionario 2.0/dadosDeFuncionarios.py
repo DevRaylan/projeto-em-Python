@@ -1,6 +1,6 @@
 #funcionario.py
 #classe
-class Funcionario:
+class DadosDeFuncionarios:
     def __init__(self, nome, idade, salario):
         self.nome = nome  # Atributo de instância
         self.idade = idade
@@ -19,6 +19,7 @@ class Funcionario:
             print("Erro: O nome não pode ser vazio.")
         return None
         return nome
+
     def validar_idade(idade):
         try:
             idade = int(idade)
@@ -40,8 +41,8 @@ class Funcionario:
             return None
     
     def validar_tipo(tipo):
-        if tipo.lower() not in ["funcionario", "gerente", "desenvolvedor"]:
-            print("Erro: Tipo de funcionário inválido. Escolha entre 'funcionario', 'gerente' ou 'desenvolvedor'.")
+        if tipo.lower() not in ["geral", "gerente", "desenvolvedor"]:
+            print("Erro: Tipo de Função inválido. Escolha entre 'geral', 'gerente' ou 'desenvolvedor'.")
             return None
         return tipo.lower()
     
