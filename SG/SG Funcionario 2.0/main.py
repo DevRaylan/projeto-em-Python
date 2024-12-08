@@ -16,6 +16,8 @@ while True:
     elif opcao == "2":
         backup_dados()  # Função para criar backup
     elif opcao == "3":
+        show_interface(empresa)  # Call the new interface
+    elif opcao == "4":
         print("Saindo do sistema...")
         break
     else:

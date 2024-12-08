@@ -1,5 +1,6 @@
 import logging
 from banco_de_dados import listar_funcionarios, adicionar_funcionario, buscar_funcionario, excluir_funcionario, editar_funcionario
+from desenvolvedor import Desenvolvedor  # Import the Desenvolvedor class
 
 # Cria um logger
 logger = logging.getLogger(__name__)
@@ -26,10 +27,16 @@ def submenu_buscar_funcionario(empresa):
         
         if opcao == "1":
             nome = input("Digite o nome do funcionário a buscar: ")
-            print(buscar_funcionario(empresa, nome=nome))  # Busca por nome
+            logger.info(f"Buscando funcionário por nome: {nome}")
+            result = buscar_funcionario(empresa, nome=nome)
+            logger.info(f"Resultado da busca por nome: {result}")
+            print(result)  # Busca por nome
         elif opcao == "2":
             id_funcionario = int(input("Digite o ID do funcionário a buscar: "))
-            print(buscar_funcionario(empresa, id_funcionario=id_funcionario))  # Busca por ID
+            logger.info(f"Buscando funcionário por ID: {id_funcionario}")
+            result = buscar_funcionario(empresa, id_funcionario=id_funcionario)
+            logger.info(f"Resultado da busca por ID: {result}")
+            print(result)  # Busca por ID
         elif opcao == "3":
             break  # Voltar para o menu principal
         else:
@@ -51,14 +58,14 @@ def submenu_funcionario(empresa):
             nome = input("Digite o nome: ")
             idade = int(input("Digite a idade: "))
             salario = float(input("Digite o salário: "))
-            tipo = input("Digite o tipo de função (Geral, Gerente, Desenvolvedor): ")
+            tipo = input("Digite o tipo de função (Geral, Gerente, Desenvolvedor): ").strip().lower()
             departamento = input("Digite o departamento (deixe em branco se não aplicável): ")
             linguagem_programacao = input("Digite a linguagem de programação (deixe em branco se não aplicável): ")
 
             # Cria um objeto de funcionário com base no tipo
-            if tipo == "Geral":
+            if tipo == "geral":
                 funcionario = Funcionario(nome, idade, salario)
-            elif tipo == "Gerente":
+            elif tipo == "gerente":
                 funcionario = Gerente(nome, idade, salario, departamento)
             elif tipo == "Desenvolvedor":
                 funcionario = Desenvolvedor(nome, idade, salario, linguagem_programacao)
