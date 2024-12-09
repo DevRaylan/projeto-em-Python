@@ -1,1 +1,3 @@
 2024-12-09 09:30:06,862 - menu_principal - ERROR - Ocorreu um erro: invalid literal for int() with base 10: 'rick'
+2024-12-09 12:04:41,904 - menu_principal - ERROR - Ocorreu um erro: name 'sys' is not defined
+2024-12-09 12:05:38,240 - menu_principal - ERROR - Ocorreu um erro: name 'sys' is not defined
