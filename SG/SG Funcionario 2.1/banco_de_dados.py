@@ -146,8 +146,9 @@ def backup_dados():
         print(f"Erro ao criar o backup: {e}")
 
 def listar_backups():
-    """Lista os arquivos de backup disponíveis no diretório."""
-    backup_files = [f for f in os.listdir() if f.startswith('empresa_backup_') and f.endswith('.db')]
+    """Lista os arquivos de backup disponíveis no diretório SG."""
+    backup_dir = 'SG'
+    backup_files = [f for f in os.listdir(backup_dir) if f.startswith('empresa_backup_') and f.endswith('.db')]
     
     if not backup_files:
         print("Nenhum backup encontrado.")
@@ -157,7 +158,7 @@ def listar_backups():
     for i, backup in enumerate(backup_files, 1):
         print(f"{i}. {backup}")
     
-    return backup_files
+    return [os.path.join(backup_dir, f) for f in backup_files]
 
 def recuperar_backup():
     """Permite que o usuário recupere um backup a partir de uma lista."""
