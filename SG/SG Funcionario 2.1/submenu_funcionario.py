@@ -16,37 +16,11 @@ file_handler.setFormatter(formatter)
 # Adiciona o file handler ao logger
 logger.addHandler(file_handler)
 
-def submenu_buscar_funcionario(empresa):
-    while True:
-        print("\n--- Submenu Buscar Funcionário ---")
-        print("1. Buscar por Nome")
-        print("2. Buscar por ID")
-        print("3. Voltar para o Menu Funcionários")
-        
-        opcao = input("Escolha uma opção: ")
-        
-        if opcao == "1":
-            nome = input("Digite o nome do funcionário a buscar: ")
-            logger.info(f"Buscando funcionário por nome: {nome}")
-            result = buscar_funcionario(empresa, nome=nome)
-            logger.info(f"Resultado da busca por nome: {result}")
-            print(result)  # Busca por nome
-        elif opcao == "2":
-            id_funcionario = int(input("Digite o ID do funcionário a buscar: "))
-            logger.info(f"Buscando funcionário por ID: {id_funcionario}")
-            result = buscar_funcionario(empresa, id_funcionario=id_funcionario)
-            logger.info(f"Resultado da busca por ID: {result}")
-            print(result)  # Busca por ID
-        elif opcao == "3":
-            break  # Voltar para o menu principal
-        else:
-            print("Opção inválida.")
-
 def submenu_funcionario(empresa):
     while True:
         print("\n--- Menu Funcionários ---")
-        print("1. Adicionar")
-        print("2. Listar ")
+        print("1. Listar ")
+        print("2. Adicionar")
         print("3. Buscar ")
         print("4. Excluir ")
         print("5. Editar ")
@@ -55,6 +29,8 @@ def submenu_funcionario(empresa):
         opcao = input("Escolha uma opção: ")
         
         if opcao == "1":
+            print(listar_funcionarios(empresa))  # Função de listar funcionários chamada com 'empresa'
+        elif opcao == "2":
             nome = input("Digite o nome: ")
             idade = int(input("Digite a idade: "))
             salario = float(input("Digite o salário: "))
@@ -67,7 +43,7 @@ def submenu_funcionario(empresa):
                 funcionario = Funcionario(nome, idade, salario)
             elif tipo == "gerente":
                 funcionario = Gerente(nome, idade, salario, departamento)
-            elif tipo == "Desenvolvedor":
+            elif tipo == "desenvolvedor":
                 funcionario = Desenvolvedor(nome, idade, salario, linguagem_programacao)
             else:
                 print("Tipo de função inválido.")
@@ -75,8 +51,6 @@ def submenu_funcionario(empresa):
 
             adicionar_funcionario(empresa, funcionario)
             print(listar_funcionarios(empresa))  # Exibe a tabela de funcionários após adicionar
-        elif opcao == "2":
-            print(listar_funcionarios(empresa))  # Função de listar funcionários chamada com 'empresa'
         elif opcao == "3":
             submenu_buscar_funcionario(empresa)
         elif opcao == "4":
@@ -96,6 +70,37 @@ def submenu_funcionario(empresa):
             print(editar_funcionario(empresa, nome, idade, salario, departamento, linguagem))  # Editar funcionário
             print(listar_funcionarios(empresa))  # Exibe a tabela de funcionários após editar
         elif opcao == "6":
+            break  # Voltar para o menu principal
+        else:
+            print("Opção inválida.")
+
+def submenu_buscar_funcionario(empresa):
+    while True:
+        print("\n--- Submenu Buscar Funcionário ---")
+        print("1. Buscar por Nome")
+        print("2. Buscar por ID")
+        print("3. Voltar para o Menu Funcionários")
+        
+        opcao = input("Escolha uma opção: ")
+        
+        if opcao == "1":
+            nome = input("Digite o nome do funcionário a buscar: ")
+            logger.info(f"Buscando funcionário por nome: {nome}")
+            result = buscar_funcionario(empresa, nome=nome)
+            logger.info(f"Resultado da busca por nome: {result}")
+            print(result)  # Busca por nome
+        elif opcao == "2":
+            try:
+                id_funcionario = int(input("Digite o ID do funcionário a buscar: "))
+                logger.info(f"Buscando funcionário por ID: {id_funcionario}")
+                result = buscar_funcionario(empresa, id_funcionario=id_funcionario)
+                logger.info(f"Resultado da busca por ID: {result}")
+                print(result)  # Busca por ID
+            except ValueError as e:
+                logger.error(f"Ocorreu um erro: {e}")
+                print(f"Ocorreu um erro: {e}. Voltando para o menu principal.")
+                break
+        elif opcao == "3":
             break  # Voltar para o menu principal
         else:
             print("Opção inválida.")
