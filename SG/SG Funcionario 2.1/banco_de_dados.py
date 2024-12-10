@@ -2,7 +2,7 @@ import sqlite3
 import shutil
 import os
 from datetime import datetime
-from tabulate import tabulate  # Importação corrigida
+from tabulate import tabulate
 
 def conectar_banco():
     """Conectar ao banco de dados SQLite"""
@@ -76,7 +76,6 @@ def listar_funcionarios(empresa):
     conn.close()
     return tabela
 
-
 def buscar_funcionario(empresa, nome=None, id_funcionario=None):
     """Busca funcionário por nome ou ID"""
     conn = conectar_banco()
@@ -87,6 +86,7 @@ def buscar_funcionario(empresa, nome=None, id_funcionario=None):
     elif id_funcionario:
         cursor.execute('SELECT * FROM funcionarios WHERE id = ?', (id_funcionario,))
     else:
+        conn.close()
         return 'Informe nome ou ID para busca.'
     
     funcionario = cursor.fetchone()
@@ -131,13 +131,8 @@ def editar_funcionario(empresa, nome, idade=None, salario=None, departamento=Non
 def backup_dados():
     """Cria um backup do banco de dados atual."""
     try:
-        # Caminho atual do banco de dados
         db_path = 'empresa.db'
-
-        # Cria um nome de backup com base na data e hora
         backup_name = f"empresa_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
-
-        # Copia o banco de dados para o arquivo de backup
         shutil.copy(db_path, backup_name)
         print(f"Backup criado com sucesso! O arquivo de backup é: {backup_name}")
     except FileNotFoundError:
@@ -148,6 +143,9 @@ def backup_dados():
 def listar_backups():
     """Lista os arquivos de backup disponíveis no diretório SG."""
     backup_dir = 'SG'
+    if not os.path.exists(backup_dir):
+        os.makedirs(backup_dir)
+    
     backup_files = [f for f in os.listdir(backup_dir) if f.startswith('empresa_backup_') and f.endswith('.db')]
     
     if not backup_files:
@@ -168,12 +166,10 @@ def recuperar_backup():
         return
 
     try:
-        # Solicita ao usuário escolher qual backup deseja restaurar
         escolha = int(input(f"Escolha o número do backup que deseja restaurar (1-{len(backups)}): "))
 
         if 1 <= escolha <= len(backups):
             backup_selecionado = backups[escolha - 1]
-            # Substitui o banco de dados atual pelo backup selecionado
             shutil.copy(backup_selecionado, 'empresa.db')
             print(f"Backup {backup_selecionado} restaurado com sucesso!")
         else:
