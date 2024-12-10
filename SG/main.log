@@ -1,0 +1,2 @@
+2024-12-10 11:41:26,095 - __main__ - ERROR - Ocorreu um erro: editar_funcionario() got an unexpected keyword argument 'id_funcionario'
+2024-12-10 11:43:03,024 - __main__ - ERROR - Ocorreu um erro: editar_funcionario() got an unexpected keyword argument 'linguagem'

@@ -108,23 +108,35 @@ def excluir_funcionario(empresa, nome):
     conn.close()
     return f'Funcionário {nome} removido com sucesso.' if cursor.rowcount > 0 else 'Funcionário não encontrado.'
 
-def editar_funcionario(empresa, nome, idade=None, salario=None, departamento=None, linguagem_programacao=None):
+def editar_funcionario(empresa, nome=None, id_funcionario=None, idade=None, salario=None, departamento=None, linguagem_programacao=None):
     """Edita dados de um funcionário"""
     conn = conectar_banco()
     cursor = conn.cursor()
 
-    if idade:
-        cursor.execute('UPDATE funcionarios SET idade = ? WHERE nome LIKE ?', (idade, nome))
-    if salario:
-        cursor.execute('UPDATE funcionarios SET salario = ? WHERE nome LIKE ?', (salario, nome))
-    if departamento:
-        cursor.execute('UPDATE funcionarios SET departamento = ? WHERE nome LIKE ?', (departamento, nome))
-    if linguagem_programacao:
-        cursor.execute('UPDATE funcionarios SET linguagem_programacao = ? WHERE nome LIKE ?', (linguagem_programacao, nome))
-    
+    if nome:
+        if idade:
+            cursor.execute('UPDATE funcionarios SET idade = ? WHERE nome LIKE ?', (idade, nome))
+        if salario:
+            cursor.execute('UPDATE funcionarios SET salario = ? WHERE nome LIKE ?', (salario, nome))
+        if departamento:
+            cursor.execute('UPDATE funcionarios SET departamento = ? WHERE nome LIKE ?', (departamento, nome))
+        if linguagem_programacao:
+            cursor.execute('UPDATE funcionarios SET linguagem_programacao = ? WHERE nome LIKE ?', (linguagem_programacao, nome))
+    elif id_funcionario:
+        if idade:
+            cursor.execute('UPDATE funcionarios SET idade = ? WHERE id = ?', (idade, id_funcionario))
+        if salario:
+            cursor.execute('UPDATE funcionarios SET salario = ? WHERE id = ?', (salario, id_funcionario))
+        if departamento:
+            cursor.execute('UPDATE funcionarios SET departamento = ? WHERE id = ?', (departamento, id_funcionario))
+        if linguagem_programacao:
+            cursor.execute('UPDATE funcionarios SET linguagem_programacao = ? WHERE id = ?', (linguagem_programacao, id_funcionario))
+    else:
+        return 'Informe nome ou ID para edição.'
+
     conn.commit()
     conn.close()
-    return f'Funcionário {nome} atualizado com sucesso!'
+    return f'Funcionário {nome if nome else id_funcionario} atualizado com sucesso!'
 
 # Funções de Backup
 

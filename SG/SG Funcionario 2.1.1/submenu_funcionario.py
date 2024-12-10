@@ -2,36 +2,38 @@ import logging
 import sys
 from banco_de_dados import listar_funcionarios, adicionar_funcionario, buscar_funcionario, excluir_funcionario, editar_funcionario
 from desenvolvedor import Desenvolvedor  # Import the Desenvolvedor class
+from InquirerPy import inquirer
 
-# Cria um logger
+# Configuração do logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-# Cria um formatter para o logger
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-# Cria um file handler para o logger
 file_handler = logging.FileHandler('funcionarios.log')
 file_handler.setFormatter(formatter)
-
-# Adiciona o file handler ao logger
 logger.addHandler(file_handler)
 
 def submenu_funcionario(empresa):
     while True:
-        print("\n--- Menu Funcionários ---")
-        print("1. Listar ")
-        print("2. Adicionar")
-        print("3. Buscar ")
-        print("4. Excluir ")
-        print("5. Editar ")
-        print("6. Voltar para o Menu Principal")
-        print("0. Sair do Sistema")
-        
-        opcao = input("Escolha uma opção: ")
-        
+        # Exibe a lista de funcionários automaticamente
+        print(listar_funcionarios(empresa))
+
+        # Menu interativo usando InquirerPy
+        opcao = inquirer.select(
+            message="--- Menu Funcionários ---",
+            choices=[
+                {"name": "Atualizar Lista", "value": "1"},
+                {"name": "Adicionar", "value": "2"},
+                {"name": "Buscar", "value": "3"},
+                {"name": "Excluir", "value": "4"},
+                {"name": "Editar", "value": "5"},
+                {"name": "Voltar para o Menu Principal", "value": "6"},
+                {"name": "Sair do Sistema", "value": "0"},
+            ],
+            default="1",
+        ).execute()
+
         if opcao == "1":
-            print(listar_funcionarios(empresa))  # Função de listar funcionários chamada com 'empresa'
+            print(listar_funcionarios(empresa))
         elif opcao == "2":
             nome = input("Digite o nome: ")
             idade = int(input("Digite a idade: "))
@@ -60,17 +62,53 @@ def submenu_funcionario(empresa):
             print(excluir_funcionario(empresa, nome))  # Excluir funcionário
             print(listar_funcionarios(empresa))  # Exibe a tabela de funcionários após excluir
         elif opcao == "5":
-            nome = input("Digite o nome do funcionário a editar: ")
-            idade = input("Nova Idade (deixe em branco para não alterar): ")
-            salario = input("Novo Salário (deixe em branco para não alterar): ")
-            departamento = input("Novo Departamento (deixe em branco para não alterar): ")
-            linguagem = input("Nova Linguagem de Programação (deixe em branco para não alterar): ")
-            
-            idade = int(idade) if idade else None
-            salario = float(salario) if salario else None
+            # Exibe a lista de funcionários
+            print(listar_funcionarios(empresa))
 
-            print(editar_funcionario(empresa, nome, idade, salario, departamento, linguagem))  # Editar funcionário
-            print(listar_funcionarios(empresa))  # Exibe a tabela de funcionários após editar
+            # Submenu de edição com InquirerPy
+            opcao_editar = inquirer.select(
+                message="--- Submenu Editar Funcionário ---",
+                choices=[
+                    {"name": "Editar por Nome", "value": "1"},
+                    {"name": "Editar por ID", "value": "2"},
+                    {"name": "Voltar para o Menu Funcionários", "value": "3"},
+                ],
+                default="1",
+            ).execute()
+
+            if opcao_editar == "1":
+                nome = input("Digite o nome do funcionário a editar: ")
+                idade = input("Nova Idade (deixe em branco para não alterar): ")
+                salario = input("Novo Salário (deixe em branco para não alterar): ")
+                departamento = input("Novo Departamento (deixe em branco para não alterar): ")
+                linguagem_programacao = input("Nova Linguagem de Programação (deixe em branco para não alterar): ")
+
+                idade = int(idade) if idade else None
+                salario = float(salario) if salario else None
+
+                resultado = editar_funcionario(empresa, nome=nome, idade=idade, salario=salario, departamento=departamento, linguagem_programacao=linguagem_programacao)  # Editar funcionário
+                print(resultado)
+            elif opcao_editar == "2":
+                try:
+                    id_funcionario = int(input("Digite o ID do funcionário a editar: "))
+                    idade = input("Nova Idade (deixe em branco para não alterar): ")
+                    salario = input("Novo Salário (deixe em branco para não alterar): ")
+                    departamento = input("Novo Departamento (deixe em branco para não alterar): ")
+                    linguagem_programacao = input("Nova Linguagem de Programação (deixe em branco para não alterar): ")
+
+                    idade = int(idade) if idade else None
+                    salario = float(salario) if salario else None
+
+                    resultado = editar_funcionario(empresa, id_funcionario=id_funcionario, idade=idade, salario=salario, departamento=departamento, linguagem_programacao=linguagem_programacao)  # Editar funcionário
+                    print(resultado)
+                    print(listar_funcionarios(empresa))  # Exibe a tabela de funcionários atualizada após editar
+                except ValueError as e:
+                    logger.error(f"Ocorreu um erro: {e}")
+                    print(f"Ocorreu um erro: {e}. Voltando para o menu principal.")
+            elif opcao_editar == "3":
+                continue  # Voltar para o menu principal
+            else:
+                print("Opção inválida.")
         elif opcao == "6":
             break  # Voltar para o menu principal
         elif opcao == "0":
@@ -81,13 +119,17 @@ def submenu_funcionario(empresa):
 
 def submenu_buscar_funcionario(empresa):
     while True:
-        print("\n--- Submenu Buscar Funcionário ---")
-        print("1. Buscar por Nome")
-        print("2. Buscar por ID")
-        print("3. Voltar para o Menu Funcionários")
-        
-        opcao = input("Escolha uma opção: ")
-        
+        # Submenu de busca com InquirerPy
+        opcao = inquirer.select(
+            message="--- Submenu Buscar Funcionário ---",
+            choices=[
+                {"name": "Buscar por Nome", "value": "1"},
+                {"name": "Buscar por ID", "value": "2"},
+                {"name": "Voltar para o Menu Funcionários", "value": "3"},
+            ],
+            default="1",
+        ).execute()
+
         if opcao == "1":
             nome = input("Digite o nome do funcionário a buscar: ")
             logger.info(f"Buscando funcionário por nome: {nome}")
