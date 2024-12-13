@@ -6,7 +6,8 @@ from login import Login
 import time
 
 # Caminho para o driver do Chrome
-driver_path = 'C:\\chromedriver\\chromedriver.exe'
+#driver_path = 'C:\\chromedriver\\chromedriver.exe'
+driver_path = '/Users/raylanaraujo/chromedriver/chromedriver'
 
 # Criação da instância do navegador usando o Service
 service = Service(driver_path)
